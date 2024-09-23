@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/widgets/button.dart';
@@ -12,7 +13,26 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn() {}
+  void signUserIn(BuildContext context) {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    // Email validation
+    if (!EmailValidator.validate(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    // Password validation
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your password')),
+      );
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +109,7 @@ class LoginScreen extends StatelessWidget {
 
               // sign in button
               MyButton(
-                onTap: signUserIn,
+                onTap: () => signUserIn(context),
               ),
 
               // empty spaces
@@ -117,41 +137,6 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       TextField(
-      //         controller: _emailController,
-      //         decoration: InputDecoration(
-      //           labelText: 'Email',
-      //         ),
-      //       ),
-      //       SizedBox(height: 20),
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           final email = _emailController.text;
-
-      //           // Validate email (you can add more validation here)
-      //           if (email.isNotEmpty) {
-      //             // Log in the user
-      //             Provider.of<AppState>(context, listen: false).logIn(email);
-
-      //             // Navigate to home screen
-      //             Navigator.pushReplacementNamed(context, '/home');
-      //           } else {
-      //             // Show an error message or validation
-      //             ScaffoldMessenger.of(context).showSnackBar(
-      //               SnackBar(content: Text('Please enter a valid email')),
-      //             );
-      //           }
-      //         },
-      //         child: Text('Log In'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
