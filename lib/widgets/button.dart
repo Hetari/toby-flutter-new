@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
   final Function()? onTap;
+  final String label;
 
-  const MyButton({super.key, required this.onTap});
+  const MyButton({
+    super.key,
+    required this.onTap,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +24,10 @@ class MyButton extends StatelessWidget {
             8), // To ensure ripple effect respects button shape
         child: Container(
           padding: const EdgeInsets.all(25),
-          child: const Center(
+          child: Center(
             child: Text(
-              "Sign In",
-              style: TextStyle(
+              label,
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

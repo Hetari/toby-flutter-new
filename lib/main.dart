@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/screens/home_screen.dart';
 import 'package:toby_flutter/screens/login_screen.dart';
+import 'package:toby_flutter/screens/register_screen.dart';
 
 void main() {
   runApp(
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => HomeScreen(),
         '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
       },
     );
   }

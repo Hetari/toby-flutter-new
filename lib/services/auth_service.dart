@@ -11,4 +11,15 @@ class AuthService {
     });
     return response;
   }
+
+  Future<Map<String, dynamic>> register(
+      String name, String email, String password) async {
+    final response = await _apiWrapper.post('/register', {
+      'name': name,
+      'email': email,
+      'password': password,
+    });
+
+    return response;
+  }
 }

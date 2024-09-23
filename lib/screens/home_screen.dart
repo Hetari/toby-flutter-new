@@ -5,6 +5,14 @@ import 'package:toby_flutter/providers/app_state.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  void logOut(BuildContext context) {
+    // Log out the user by clearing their session in AppState
+    Provider.of<AppState>(context, listen: false).logOut();
+
+    // Navigate back to login screen
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     // Access AppState using Provider
@@ -13,6 +21,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => logOut(context), // Logout button
+          ),
+        ],
       ),
       body: Center(
         child: Column(

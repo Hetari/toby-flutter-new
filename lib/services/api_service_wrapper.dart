@@ -15,12 +15,7 @@ class ApiServiceWrapper {
         body: jsonEncode(body),
       );
 
-      // Check for valid response (status code 200)
-      if (response.statusCode == 200) {
-        return _handleResponse(response);
-      } else {
-        return _handleError(response);
-      }
+      return _handleResponse(response);
     } catch (e) {
       return _handleException(e);
     }
@@ -32,15 +27,6 @@ class ApiServiceWrapper {
     return decoded is Map<String, dynamic>
         ? decoded
         : {'error': 'Unexpected response format'};
-  }
-
-  // Handle error responses
-  Map<String, dynamic> _handleError(http.Response response) {
-    final error = jsonDecode(response.body);
-    return {
-      'error': error['message'] ??
-          'Request failed with status: ${response.statusCode}',
-    };
   }
 
   // Handle exceptions like network errors

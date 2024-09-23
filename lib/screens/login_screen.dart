@@ -136,6 +136,7 @@ class LoginScreen extends StatelessWidget {
 
               // sign in button
               MyButton(
+                label: "Sign in",
                 onTap: () => signUserIn(context),
               ),
 
@@ -151,11 +152,17 @@ class LoginScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context,
+                          '/register'); // Navigate to the register page
+                    },
+                    child: const Text(
+                      'Register now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
