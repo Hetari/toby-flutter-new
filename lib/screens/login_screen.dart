@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toby_flutter/services/auth_service.dart';
 import 'package:toby_flutter/widgets/button.dart';
 import 'package:toby_flutter/widgets/text_field.dart';
 import '../providers/app_state.dart';
@@ -8,12 +9,15 @@ import '../providers/app_state.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
+  // AuthService instance
+  final AuthService _authService = AuthService();
+
   // text editing controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn(BuildContext context) {
+  void signUserIn(BuildContext context) async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
@@ -31,6 +35,29 @@ class LoginScreen extends StatelessWidget {
         const SnackBar(content: Text('Please enter your password')),
       );
       return;
+    }
+
+    // Call the AuthService to perform login
+    final result = await _authService.login(email, password);
+
+    // Check if login was successful
+    if (result['success'] == true) {
+      // Extract necessary data from the response
+      final userData = result['data'];
+      final userEmail = userData['email'];
+      final token = userData['access_token'];
+
+      Provider.of<AppState>(context, listen: false).logIn(userEmail, token);
+
+      // Redirect to home screen
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      // Handle login failure
+      final errorMessage = result['message'] ?? 'Login failed';
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
     }
   }
 

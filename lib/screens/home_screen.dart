@@ -7,6 +7,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access AppState using Provider
+    final appState = Provider.of<AppState>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -15,21 +18,38 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Consumer<AppState>(
-              builder: (context, appState, child) {
-                return Text('Data: ${appState.data}');
-              },
+            // Display user's email from AppState
+            Text(
+              'Welcome, ${appState.userEmail ?? 'Guest'}!',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Provider.of<AppState>(context, listen: false)
-                    .updateData('New data from Home');
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              child: const Text('Go to Details'),
+            const SizedBox(height: 20),
+            // Add more user data display here if necessary
+            Text(
+              'User data: ${appState.data.isEmpty ? "No data" : appState.data}',
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
+        // body: Center(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Consumer<AppState>(
+        //         builder: (context, appState, child) {
+        //           return Text('Data: ${appState.data}');
+        //         },
+        //       ),
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           Provider.of<AppState>(context, listen: false)
+        //               .updateData('New data from Home');
+        //           Navigator.pushReplacementNamed(context, '/login');
+        //         },
+        //         child: const Text('Go to Details'),
+        //       ),
+        //     ],
+        //   ),
       ),
     );
   }
