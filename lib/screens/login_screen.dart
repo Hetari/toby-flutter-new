@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -154,7 +156,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context,
+                      Navigator.pushReplacementNamed(context,
                           '/register'); // Navigate to the register page
                     },
                     child: const Text(
