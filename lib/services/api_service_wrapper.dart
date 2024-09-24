@@ -1,8 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:toby_flutter/providers/app_state.dart';
 
 class ApiServiceWrapper {
   final String baseUrl = 'http://127.0.0.1:8000/api';
+
+  final appState = Provider.of<AppState>;
+
+  // Generic method for making POST requests
+  static const Map<String, String> defaultHeaders = {
+    'Content-Type': 'application/json',
+  };
 
   // New method for making GET requests
   Future<Map<String, dynamic>> get(String endpoint,
@@ -22,15 +31,15 @@ class ApiServiceWrapper {
   }
 
   // Generic method for making POST requests
-  Future<Map<String, dynamic>> post(
-      String endpoint, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> body,
+      {Map<String, String> headers = defaultHeaders}) async {
     final url = Uri.parse('$baseUrl$endpoint');
 
     try {
       final response = await http.post(
         url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+        headers: headers,
+        body: body,
       );
 
       return _handleResponse(response);

@@ -62,7 +62,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                         return {
                           'title': collection['title'] ?? 'Untitled',
                           'subtitle':
-                              collection['subtitle'] ?? 'No description',
+                              collection['description'] ?? 'No description',
                           'icon': Icons.folder,
                           'color': Colors.blue,
                         };

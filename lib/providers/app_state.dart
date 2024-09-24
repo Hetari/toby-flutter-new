@@ -28,6 +28,10 @@ class AppState with ChangeNotifier {
     notifyListeners(); // إشعار واجهة المستخدم للتحديث
   }
 
+  String getToken() {
+    return box.read('userToken');
+  }
+
   // تحديث البيانات
   void updateData(String newData) {
     _data = newData;
