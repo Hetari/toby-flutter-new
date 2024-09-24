@@ -61,7 +61,7 @@ class RegisterScreen extends StatelessWidget {
     }
 
     // Call the AuthService to perform registration
-    final result = await _authService.register(name, email, password);
+    final result = await _authService.register(context, name, email, password);
 
     // print("\n\n ");
     // print(result);
