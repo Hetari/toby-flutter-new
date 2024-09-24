@@ -1,23 +1,23 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 
-class HeaderWidget extends StatelessWidget {
+class HeaderWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final List<Widget>? actions; // زر التحديث أو أي أدوات إضافية
 
   const HeaderWidget({
-    required this.title,
     super.key,
+    required this.title,
+    this.actions,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
+    return AppBar(
+      title: Text(title),
+      actions: actions, // يتم تمرير الأدوات الإضافية مثل زر التحديث هنا
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
