@@ -9,7 +9,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppState(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -24,14 +24,14 @@ class MyApp extends StatelessWidget {
         builder: (context, appState, child) {
           // Check if the user is logged in
           if (appState.isLoggedIn) {
-            return HomeScreen(); // User is logged in
+            return const HomeScreen(); // User is logged in
           } else {
             return LoginScreen(); // Redirect to login screen
           }
         },
       ),
       routes: {
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => const HomeScreen(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
       },

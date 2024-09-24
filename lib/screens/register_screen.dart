@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,9 +63,9 @@ class RegisterScreen extends StatelessWidget {
     // Call the AuthService to perform registration
     final result = await _authService.register(name, email, password);
 
-    print("\n\n ");
-    print(result);
-    print("\n\n ");
+    // print("\n\n ");
+    // print(result);
+    // print("\n\n ");
 
     // Check if registration was successful
     if (result['success'] == true) {
