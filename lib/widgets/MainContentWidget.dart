@@ -1,11 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
-import 'package:toby_flutter/screens/Tabs_screen.dart';
+import 'package:toby_flutter/screens/add_collection.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
 import 'package:toby_flutter/widgets/CollectionSectionWidget.dart';
+import 'package:toby_flutter/widgets/FooterWidget.dart';
 import 'package:toby_flutter/widgets/HeaderWidget.dart';
 
 class MainContentWidget extends StatefulWidget {
@@ -17,14 +16,12 @@ class MainContentWidget extends StatefulWidget {
 
 class _MainContentWidgetState extends State<MainContentWidget> {
   late CollectionService apiService;
-  late Future<List<dynamic>> collectionsFuture;
 
   @override
   void initState() {
     super.initState();
     final appState = Provider.of<AppState>(context, listen: false);
     apiService = CollectionService(appState);
-    collectionsFuture = fetchCollections();
   }
 
   Future<List<dynamic>> fetchCollections() async {
@@ -36,76 +33,59 @@ class _MainContentWidgetState extends State<MainContentWidget> {
     }
   }
 
-  void _refreshCollections() {
-    setState(() {
-      collectionsFuture = fetchCollections();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: HeaderWidget(
-        title: 'My Collections',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _refreshCollections,
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<List<dynamic>>(
-              future: collectionsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Error: ${snapshot.error}'),
-                        ElevatedButton(
-                          onPressed: _refreshCollections,
-                          child: const Text('Retry'),
-                        ),
-                      ],
+    // Get screen height with MediaQuery
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return SafeArea(
+      child: SizedBox(
+        // Fix the height to the full screen
+        height: screenHeight,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder<List<dynamic>>(
+                future: fetchCollections(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    List<dynamic> collections = snapshot.data!;
+                    return CollectionSectionWidget(
+                      sectionTitle: 'API Collections',
+                      cardsData: collections.map((collection) {
+                        return {
+                          'title': collection['title'] ?? 'Untitled',
+                          'subtitle':
+                              collection['subtitle'] ?? 'No description',
+                          'icon': Icons.folder,
+                          'color': Colors.blue,
+                        };
+                      }).toList(),
+                    );
+                  } else {
+                    return const Center(child: Text('No collections found'));
+                  }
+                },
+              ),
+              FooterWidget(
+                onAddPressed: () {
+                  // Navigate to Add Collection Screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddCollectionScreen(),
                     ),
                   );
-                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  List<dynamic> collections = snapshot.data!;
-                  return CollectionSectionWidget(
-                    sectionTitle: 'API Collections',
-                    cardsData: collections.map((collection) {
-                      List<dynamic> tags = collection['tags'] ?? [];
-                      return {
-                        'title': collection['title'] ?? 'Untitled',
-                        'subtitle': collection['subtitle'] ?? 'No description',
-                        'tags': tags,
-                        'onTap': () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TabsPage(collectionId: collection['id']),
-                            ),
-                          );
-                        },
-                        'icon': Icons.folder,
-                        'color': Colors.blue,
-                      };
-                    }).toList(),
-                  );
-                } else {
-                  return const Center(child: Text('No collections found'));
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

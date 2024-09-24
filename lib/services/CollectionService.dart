@@ -37,9 +37,11 @@ class CollectionService {
   }
 
   // Create a new collection
-  Future<Map<String, dynamic>> createCollection(String title) async {
+  Future<Map<String, dynamic>> createCollection(
+      String title, String description) async {
     final response = await _apiWrapper.post('/collections/', {
       'title': title,
+      'description': description,
     });
     return response;
   }
