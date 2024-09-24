@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/screens/home_screen.dart';
 import 'package:toby_flutter/screens/login_screen.dart';
 import 'package:toby_flutter/screens/register_screen.dart';
 
-void main() {
+void main() async {
+  // تأكد من تهيئة get_storage قبل تشغيل التطبيق
+  await GetStorage.init();
   runApp(
     ChangeNotifierProvider(
-      create: (_) => AppState(),
+      create: (_) =>
+          AppState()..loadUser(), // تحميل بيانات المستخدم عند بدء التشغيل
       child: const MyApp(),
     ),
   );
