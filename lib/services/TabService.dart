@@ -5,33 +5,37 @@ import 'package:toby_flutter/services/api_service_wrapper.dart';
 
 class TabService {
   final ApiServiceWrapper _apiWrapper = ApiServiceWrapper();
-  late final AppState _appState;
+  late final AppState _appState; // يجب أن يتم تعيين _appState في الكونستركتور
+
+  TabService(AppState appState) {
+    _appState = appState; // تعيين AppState في الكونستركتور
+  }
 
   // Fetch all tabs for a specific collection
   Future<List<dynamic>> fetchTabs(int collectionId) async {
-    print(collectionId);
+    print('Fetching tabs for collection ID: $collectionId');
     if (_appState.isLoggedIn) {
-      final token = _appState.userToken; // الحصول على token المستخدم
+      final token = _appState.userToken;
 
       if (token == null || token.isEmpty) {
         throw Exception('User is not authenticated. Please log in.');
       }
-      print(collectionId);
+
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'id': '$collectionId',
         'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.get('/tabs', headers: headers);
-      // print(response['success']);
+
       if (response.containsKey('error')) {
-        // إذا كانت هناك خطأ في الاستجابة
-        return []; // أو يمكنك إلقاء استثناء حسب حاجتك
+        // Handle error in response
+        return [];
       }
+
       if (response is Map && response['data'] is List) {
-        return response['data']; // إرجاع البيانات إذا كانت قائمة
+        return response['data']; // Return data if it's a list
       }
     }
     return [];
@@ -41,13 +45,14 @@ class TabService {
   Future<List<dynamic>> fetchAllTabs() async {
     if (_appState.isLoggedIn) {
       final response = await _apiWrapper.get('/tabs');
-      print(response['success']);
+
       if (response.containsKey('error')) {
-        // إذا كانت هناك خطأ في الاستجابة
-        return []; // أو يمكنك إلقاء استثناء حسب حاجتك
+        // Handle error in response
+        return [];
       }
+
       if (response is Map && response['data'] is List) {
-        return response['data']; // إرجاع البيانات إذا كانت قائمة
+        return response['data']; // Return data if it's a list
       }
     }
     return [];
@@ -59,7 +64,7 @@ class TabService {
       'title': title,
       'collection_id': collectionId,
     });
-    return response;
+    return response; // Consider handling response error here
   }
 
   // Delete a tab
@@ -67,6 +72,6 @@ class TabService {
     final response = await _apiWrapper.post('/tabs/delete', {
       'id': id,
     });
-    return response;
+    return response; // Consider handling response error here
   }
 }

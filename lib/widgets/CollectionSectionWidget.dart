@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CollectionSectionWidget extends StatelessWidget {
-  final String sectionTitle;
+  // final String sectionTitle;
   final List<Map<String, dynamic>> cardsData;
   final Function(int id) onDelete; // دالة الحذف
   final Function(int id) onUpdate; // دالة التحديث
 
   const CollectionSectionWidget({
     super.key,
-    required this.sectionTitle,
+    // required this.sectionTitle,
     required this.cardsData,
     required this.onDelete, // تمرير دالة الحذف
     required this.onUpdate, // تمرير دالة التحديث
@@ -19,13 +19,13 @@ class CollectionSectionWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            sectionTitle,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Text(
+        //     sectionTitle,
+        //     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
