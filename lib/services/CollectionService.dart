@@ -79,9 +79,7 @@ class CollectionService {
       '/collections/$id',
       headers: headers,
     );
-
     // print(response['success']);
-
     return response;
   }
 }

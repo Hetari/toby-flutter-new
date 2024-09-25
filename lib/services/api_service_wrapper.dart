@@ -74,8 +74,8 @@ class ApiServiceWrapper {
         url,
         headers: headers ?? {'Content-Type': 'application/json'},
       );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
       return _handleResponse(response);
     } catch (e) {
       // print("hello $e");
