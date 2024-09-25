@@ -13,13 +13,14 @@ class AuthService {
       'email': email,
       'password': password,
     });
-
+    bool isLoggedIn = response['success'] ?? false;
     // إذا كانت الاستجابة ناجحة، قم بتخزين البيانات في AppState
-    if (response['success']) {
+    if (isLoggedIn) {
       // الوصول إلى AppState باستخدام Provider
       final appState = Provider.of<AppState>(context, listen: false);
       await appState.logIn(email, response['data']['access_token']);
     }
+    // print(response);
 
     return response;
   }

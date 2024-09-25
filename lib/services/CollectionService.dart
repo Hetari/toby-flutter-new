@@ -13,7 +13,7 @@ class CollectionService {
   Future<List<dynamic>> fetchCollections() async {
     if (_appState.isLoggedIn) {
       final token = _appState.userToken; // الحصول على token المستخدم
-
+      // print(token);
       if (token == null || token.isEmpty) {
         throw Exception('User is not authenticated. Please log in.');
       }
@@ -23,7 +23,7 @@ class CollectionService {
         'Accept': 'application/json'
       };
       final response = await _apiWrapper.get('/collections', headers: headers);
-      // print(response['success']);
+      print('respnos $response[\'data\']');
       if (response.containsKey('error')) {
         // إذا كانت هناك خطأ في الاستجابة
         return []; // أو يمكنك إلقاء استثناء حسب حاجتك
@@ -31,7 +31,10 @@ class CollectionService {
 
       if (response is Map && response['data'] is List) {
         return response['data']; // إرجاع البيانات إذا كانت قائمة
+      } else if (response is Map && response['data'] is Map) {
+        return response['data'].values.toList(); // إرجاع قائمة الكولكشنز
       }
+      // return response['data'];
     }
     return []; // إرجاع قائمة فارغة إذا لم يكن المستخدم مسجلاً للدخول
   }
@@ -46,9 +49,17 @@ class CollectionService {
 
   // Delete a collection
   Future<Map<String, dynamic>> deleteCollection(int id) async {
-    final response = await _apiWrapper.post('/collections/delete', {
-      'id': id,
-    });
+    // print("the id is : $id");
+    final token = _appState.userToken;
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json'
+    };
+    final response = await _apiWrapper.delete(
+      '/collections/$id',
+      headers: headers,
+    );
+    print(response['success']);
     return response;
   }
 }

@@ -42,6 +42,28 @@ class _MainContentWidgetState extends State<MainContentWidget> {
     });
   }
 
+  // دالة الحذف
+  void _deleteCollection(int id) async {
+    try {
+      await apiService.deleteCollection(id); // حذف المجموعة
+      _refreshCollections(); // تحديث القائمة بعد الحذف
+    } catch (e) {
+      print("Error deleting collection: $e");
+    }
+  }
+
+  // دالة التحديث
+  void _updateCollection(int id) {
+    // نقل البيانات إلى نموذج التحديث
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            TabsPage(collectionId: id), // الانتقال إلى صفحة التحديث
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +105,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                     cardsData: collections.map((collection) {
                       List<dynamic> tags = collection['tags'] ?? [];
                       return {
+                        'id': collection['id'],
                         'title': collection['title'] ?? 'Untitled',
                         'subtitle': collection['subtitle'] ?? 'No description',
                         'tags': tags,
@@ -99,6 +122,8 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                         'color': Colors.blue,
                       };
                     }).toList(),
+                    onDelete: _deleteCollection, // تمرير دالة الحذف
+                    onUpdate: _updateCollection, // تمرير دالة التحديث
                   );
                 } else {
                   return const Center(child: Text('No collections found'));
