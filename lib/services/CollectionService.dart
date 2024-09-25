@@ -14,19 +14,21 @@ class CollectionService {
     if (_appState.isLoggedIn) {
       final token = _appState.userToken; // الحصول على token المستخدم
       // print(token);
+
       if (token == null || token.isEmpty) {
         throw Exception('User is not authenticated. Please log in.');
       }
+
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json'
       };
+
       final response = await _apiWrapper.get('/collections', headers: headers);
-      print('respnos $response[\'data\']');
+      // print(response['success']);
       if (response.containsKey('error')) {
-        // إذا كانت هناك خطأ في الاستجابة
-        return []; // أو يمكنك إلقاء استثناء حسب حاجتك
+        return [];
       }
 
       if (response is Map && response['data'] is List) {
@@ -40,11 +42,29 @@ class CollectionService {
   }
 
   // Create a new collection
-  Future<Map<String, dynamic>> createCollection(String title) async {
-    final response = await _apiWrapper.post('/collections/', {
-      'title': title,
-    });
-    return response;
+  Future<Map<String, dynamic>> createCollection(
+      String title, String description) async {
+    if (_appState.isLoggedIn) {
+      final token = _appState.userToken;
+
+      if (token == null || token.isEmpty) {
+        throw Exception('User is not authenticated. Please log in.');
+      }
+
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json'
+      };
+
+      final response = await _apiWrapper.post(
+        '/collections/',
+        {'title': title, 'description': description},
+        headers: headers,
+      );
+
+      return response;
+    }
+    return {};
   }
 
   // Delete a collection
@@ -59,7 +79,9 @@ class CollectionService {
       '/collections/$id',
       headers: headers,
     );
-    print(response['success']);
+
+    // print(response['success']);
+
     return response;
   }
 }

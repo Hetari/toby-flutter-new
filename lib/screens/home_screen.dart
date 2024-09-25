@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text("Home"),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -30,9 +30,11 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       drawer: const SideBarWidget(),
-      body: ChangeNotifierProvider.value(
-        value: appState,
-        child: const MainContentWidget(), // المحتوى الرئيسي
+      body: SafeArea(
+        child: ChangeNotifierProvider.value(
+          value: appState,
+          child: const MainContentWidget(), // المحتوى الرئيسي
+        ),
       ),
     );
   }
