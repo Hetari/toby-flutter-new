@@ -60,12 +60,14 @@ class TabService {
   }
 
   // Create a new tab
-  Future<Map<String, dynamic>> createTab(String title, int collectionId) async {
+  Future<Map<String, dynamic>> createTab(
+      String title, String url, int collectionId) async {
     final headers = _getHeaders();
     final response = await _apiWrapper.post(
-      '/tabs/create',
+      '/tabs',
       {
         'title': title,
+        'url': url,
         'collection_id': collectionId,
       },
       headers,
@@ -76,8 +78,9 @@ class TabService {
   // Delete a tab
   Future<Map<String, dynamic>> deleteTab(int id) async {
     final headers = _getHeaders();
+    // TODO: fix it
     final response = await _apiWrapper.post(
-      '/tabs/delete',
+      '/tabs',
       {
         'id': id,
       },

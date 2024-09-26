@@ -7,20 +7,23 @@ class CollectionService {
 
   CollectionService(this._appState);
 
-  // Fetch all collections for the logged-in user
+  Map<String, String> _getHeaders() {
+    final token = _appState.userToken;
 
+    if (token == null || token.isEmpty) {
+      throw Exception('User is not authenticated. Please log in.');
+    }
+
+    return {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json',
+    };
+  }
+
+  // Fetch all collections for the logged-in user
   Future<List<dynamic>> fetchCollections() async {
     if (_appState.isLoggedIn) {
-      final token = _appState.userToken;
-
-      if (token == null || token.isEmpty) {
-        throw Exception('User is not authenticated. Please log in.');
-      }
-
-      final headers = {
-        'Authorization': 'Bearer $token',
-      };
-
+      final headers = _getHeaders();
       final response = await _apiWrapper.get('/collections', headers);
       // print(response['success']);
       if (response.containsKey('error')) {
@@ -40,16 +43,7 @@ class CollectionService {
   Future<Map<String, dynamic>> createCollection(
       String title, String description) async {
     if (_appState.isLoggedIn) {
-      final token = _appState.userToken;
-
-      if (token == null || token.isEmpty) {
-        throw Exception('User is not authenticated. Please log in.');
-      }
-
-      final headers = {
-        'Authorization': 'Bearer $token',
-      };
-
+      final headers = _getHeaders();
       final response = await _apiWrapper.post(
         '/collections/',
         {'title': title, 'description': description},
@@ -64,17 +58,7 @@ class CollectionService {
   Future<void> updateCollection(
       int id, String title, String description) async {
     if (_appState.isLoggedIn) {
-      final token = _appState.userToken;
-
-      if (token == null || token.isEmpty) {
-        throw Exception('User is not authenticated. Please log in.');
-      }
-
-      final headers = {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
-      };
-
+      final headers = _getHeaders();
       await _apiWrapper.put('/collections/$id',
           {'title': title, 'description': description}, headers);
     }
@@ -82,16 +66,15 @@ class CollectionService {
 
   // Delete a collection
   Future<Map<String, dynamic>> deleteCollection(int id) async {
-    // print("the id is : $id");
-    final token = _appState.userToken;
-    final headers = {
-      'Authorization': 'Bearer $token',
-    };
-    final response = await _apiWrapper.delete(
-      '/collections/$id',
-      headers,
-    );
-    // print(response['success']);
-    return response;
+    if (_appState.isLoggedIn) {
+      final headers = _getHeaders();
+
+      final response = await _apiWrapper.delete(
+        '/collections/$id',
+        headers,
+      );
+      return response;
+    }
+    return {};
   }
 }
