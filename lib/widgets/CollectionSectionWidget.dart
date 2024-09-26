@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toby_flutter/screens/Tabs_screen.dart';
 
 class CollectionSectionWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardsData;
