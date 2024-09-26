@@ -27,7 +27,7 @@ class TabService {
         'Accept': 'application/json'
       };
 
-      final response = await _apiWrapper.get('/tabs', headers: headers);
+      final response = await _apiWrapper.get('/tabs', headers);
 
       if (response.containsKey('error')) {
         // Handle error in response

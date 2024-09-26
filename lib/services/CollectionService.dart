@@ -10,6 +10,7 @@ class CollectionService {
   CollectionService(this._appState);
 
   // Fetch all collections for the logged-in user
+
   Future<List<dynamic>> fetchCollections() async {
     if (_appState.isLoggedIn) {
       final token = _appState.userToken; // الحصول على token المستخدم
@@ -25,7 +26,7 @@ class CollectionService {
         'Accept': 'application/json'
       };
 
-      final response = await _apiWrapper.get('/collections', headers: headers);
+      final response = await _apiWrapper.get('/collections', headers);
       // print(response['success']);
       if (response.containsKey('error')) {
         return [];
@@ -59,7 +60,7 @@ class CollectionService {
       final response = await _apiWrapper.post(
         '/collections/',
         {'title': title, 'description': description},
-        headers: headers,
+        headers,
       );
 
       return response;
@@ -77,7 +78,7 @@ class CollectionService {
     };
     final response = await _apiWrapper.delete(
       '/collections/$id',
-      headers: headers,
+      headers,
     );
     // print(response['success']);
     return response;

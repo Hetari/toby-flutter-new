@@ -1,30 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:toby_flutter/providers/app_state.dart';
 
 class ApiServiceWrapper {
-  final String baseUrl = 'http://10.0.2.2:8000/api'; //when use flutter emulator
-  // final String baseUrl = 'http://127.0.0.1:8000/api'; // when use chrome web
-
-  final appState = Provider.of<AppState>;
+  // final String baseUrl = 'http://10.0.2.2:8000/api'; //when use flutter emulator
+  final String baseUrl = 'http://127.0.0.1:8000/api'; // when use chrome web
 
   // Generic method for making POST requests
   static const Map<String, String> defaultHeaders = {
-    'Content-Type': 'application/json',
+    'Content-Type':
+        'application/json', // Specifies that you're sending JSON data
+    'Accept':
+        'application/json', // Specifies that you expect JSON data in response
+    'User-Agent': 'Toby/1.0.0', // Identifies your app to the server
+    'Authorization': 'Bearer ',
   };
 
   // New method for making GET requests
-  Future<Map<String, dynamic>> get(String endpoint,
-      {Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> get(
+      String endpoint, Map<String, String> headers) async {
     final url = Uri.parse('$baseUrl$endpoint');
 
     try {
       final response = await http.get(
         url,
-        headers: headers ?? {'Content-Type': 'application/json'},
+        headers: {...headers, ...defaultHeaders},
       );
-      // print(response.body);
+
       return _handleResponse(response);
     } catch (e) {
       return _handleException(e);
@@ -33,14 +34,14 @@ class ApiServiceWrapper {
 
   // Generic method for making POST requests
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> body,
-      {Map<String, String> headers = defaultHeaders}) async {
+      Map<String, String> headers) async {
     final url = Uri.parse('$baseUrl$endpoint');
 
     try {
       final response = await http.post(
         url,
-        headers: headers,
-        body: body,
+        headers: {...headers, ...defaultHeaders},
+        body: jsonEncode(body),
       );
 
       return _handleResponse(response);
@@ -50,13 +51,13 @@ class ApiServiceWrapper {
   }
 
   // الدالة العامة لطلبات PUT
-  Future<Map<String, dynamic>> put(
-      String endpoint, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> body,
+      Map<String, String> headers) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.put(
         url,
-        headers: {'Content-Type': 'application/json'},
+        headers: {...headers, ...defaultHeaders},
         body: jsonEncode(body),
       );
       return _handleResponse(response);
@@ -66,13 +67,13 @@ class ApiServiceWrapper {
   }
 
   // الدالة العامة لطلبات DELETE
-  Future<Map<String, dynamic>> delete(String endpoint,
-      {Map<String, String>? headers}) async {
+  Future<Map<String, dynamic>> delete(
+      String endpoint, Map<String, String> headers) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.delete(
         url,
-        headers: headers ?? {'Content-Type': 'application/json'},
+        headers: {...headers, ...defaultHeaders},
       );
       // print('Response status: ${response.statusCode}');
       // print('Response body: ${response.body}');
