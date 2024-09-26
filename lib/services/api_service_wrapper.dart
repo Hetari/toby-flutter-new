@@ -50,14 +50,13 @@ class ApiServiceWrapper {
   }
 
   // الدالة العامة لطلبات PUT
-  Future<Map<String, dynamic>> put(
-      String endpoint, Map<String, dynamic> body) async {
+  Future<Map<String, dynamic>> put(String endpoint,
+      {Map<String, String>? headers}) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.put(
         url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+        headers: headers ?? {'Content-Type': 'application/json'},
       );
       return _handleResponse(response);
     } catch (e) {
@@ -86,7 +85,7 @@ class ApiServiceWrapper {
   // Handle response parsing
   Map<String, dynamic> _handleResponse(http.Response response) {
     final decoded = jsonDecode(response.body);
-    // print(decoded);
+    print(decoded);
     return decoded is Map<String, dynamic>
         ? decoded
         : {'error': 'Unexpected response format'};

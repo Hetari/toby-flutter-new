@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CollectionSectionWidget extends StatelessWidget {
-  // final String sectionTitle;
   final List<Map<String, dynamic>> cardsData;
+  final Function(int id, String title, String description)
+      onUpdate; // دالة التحديث مع المعلمات المطلوبة
   final Function(int id) onDelete; // دالة الحذف
-  final Function(int id) onUpdate; // دالة التحديث
 
   const CollectionSectionWidget({
     super.key,
-    // required this.sectionTitle,
     required this.cardsData,
-    required this.onDelete, // تمرير دالة الحذف
-    required this.onUpdate, // تمرير دالة التحديث
+    required this.onDelete,
+    required this.onUpdate,
   });
 
   @override
@@ -19,13 +18,6 @@ class CollectionSectionWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Text(
-        //     sectionTitle,
-        //     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        //   ),
-        // ),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -38,8 +30,7 @@ class CollectionSectionWidget extends StatelessWidget {
             final card = cardsData[index];
             return Card(
               child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center, // محاذاة مركزية للعناصر
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(card['icon'], color: card['color']),
                   Text(card['title'], style: const TextStyle(fontSize: 18)),
@@ -47,12 +38,16 @@ class CollectionSectionWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // زر التحديث
                       IconButton(
                         icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () => onUpdate(card['id']),
+                        onPressed: () {
+                          onUpdate(
+                            card['id'],
+                            card['title'],
+                            card['subtitle'], // تمرير العنوان والوصف مع المعرف
+                          );
+                        },
                       ),
-                      // زر الحذف مع التأكيد
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () => _confirmDelete(context, card['id']),

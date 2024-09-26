@@ -13,7 +13,7 @@ class TabService {
 
   // Fetch all tabs for a specific collection
   Future<List<dynamic>> fetchTabs(int collectionId) async {
-    print('Fetching tabs for collection ID: $collectionId');
+    // print('Fetching tabs for collection ID: $collectionId');
     if (_appState.isLoggedIn) {
       final token = _appState.userToken;
 

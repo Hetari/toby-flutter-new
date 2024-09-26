@@ -6,7 +6,7 @@ import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
 
 class AddCollectionScreen extends StatelessWidget {
-  AddCollectionScreen({super.key});
+  AddCollectionScreen({super.key, required Map<String, Object> collection});
 
   late CollectionService apiService;
   final TextEditingController _titleController = TextEditingController();
