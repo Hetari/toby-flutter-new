@@ -60,27 +60,39 @@ class TabService {
   }
 
   // Create a new tab
-  Future<Map<String, dynamic>> createTab(String title, int collectionId) async {
+  Future<Map<String, dynamic>> createTab(
+      String title, String url, int collectionId) async {
     final headers = _getHeaders();
     final response = await _apiWrapper.post(
-      '/tabs/create',
+      '/tabs',
       {
         'title': title,
+        'url': url,
         'collection_id': collectionId,
       },
       headers,
     );
+
     return response;
   }
 
   // Delete a tab
+  // Future<Map<String, dynamic>> deleteTab(int id) async {
+  //   final headers = _getHeaders();
+  //   // TODO: fix it
+  //   final response = await _apiWrapper.post(
+  //     '/tabs',
+  //     {
+  //       'id': id,
+  //     },
+  //     headers,
+  //   );
+  //   return response;
+  // }
   Future<Map<String, dynamic>> deleteTab(int id) async {
     final headers = _getHeaders();
-    final response = await _apiWrapper.post(
-      '/tabs/delete',
-      {
-        'id': id,
-      },
+    final response = await _apiWrapper.delete(
+      '/tabs/$id',
       headers,
     );
     return response;

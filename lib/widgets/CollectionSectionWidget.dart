@@ -36,6 +36,7 @@ class CollectionSectionWidget extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => TabsPage(
                       tabs: card['tabs'],
+                      collectionId: card['id'],
                     ),
                   ),
                 );

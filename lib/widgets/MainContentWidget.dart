@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/screens/EditCollectionScreen.dart';
-import 'package:toby_flutter/screens/Tabs_screen.dart';
 import 'package:toby_flutter/screens/add_collection.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
 import 'package:toby_flutter/widgets/CollectionSectionWidget.dart';
@@ -107,12 +106,14 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                       return CollectionSectionWidget(
                         cardsData: collections.map((collection) {
                           List<dynamic> tags = collection['tags'] ?? [];
+                          List<dynamic> tabs = collection['tabs'] ?? [];
                           return {
                             'id': collection['id'],
                             'title': collection['title'] ?? 'Untitled',
                             'subtitle':
                                 collection['description'] ?? 'No description',
                             'tags': tags,
+                            'tabs': tabs,
                             'icon': Icons.folder,
                             'color': Colors.blue,
                           };
