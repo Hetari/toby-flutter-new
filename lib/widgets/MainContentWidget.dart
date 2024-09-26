@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/screens/EditCollectionScreen.dart';
+import 'package:toby_flutter/screens/Tabs_screen.dart';
 import 'package:toby_flutter/screens/add_collection.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
 import 'package:toby_flutter/widgets/CollectionSectionWidget.dart';
@@ -55,6 +56,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
   }
 
   // تحديث مجموعة
+// تحديث مجموعة
   void _updateCollection(int id, String title, String description) {
     Navigator.push(
       context,
@@ -68,6 +70,23 @@ class _MainContentWidgetState extends State<MainContentWidget> {
     ).then((result) {
       if (result == true) {
         _refreshCollections(); // تحديث البيانات بعد التعديل
+      }
+    });
+  }
+
+// الانتقال إلى صفحة التبويبات مع التحديث عند العودة
+  void _navigateToTabs(int collectionId, List<dynamic> tabs) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TabsPage(
+          collectionId: collectionId,
+          tabs: tabs,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) {
+        _refreshCollections(); // تحديث البيانات بعد الحذف
       }
     });
   }
@@ -119,7 +138,9 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                           };
                         }).toList(),
                         onDelete: _deleteCollection,
-                        onUpdate: _updateCollection, // تحديث دالة التحديث
+                        onUpdate: _updateCollection,
+                        // عند الضغط على التبويب
+                        onViewTabs: _navigateToTabs,
                       );
                     } else {
                       return const Center(child: Text('No collections found'));

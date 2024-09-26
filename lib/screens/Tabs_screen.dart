@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
+import 'package:toby_flutter/screens/web_view_page.dart';
 import 'package:toby_flutter/services/TabService.dart';
 
 class TabsPage extends StatelessWidget {
@@ -37,17 +38,35 @@ class TabsPage extends StatelessWidget {
             ? TabBarView(
                 children: tabs!.map((tab) {
                   return Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Navigate to another screen based on the URL
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WebViewPage(url: tab['url']),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Navigate to another screen based on the URL
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    WebViewPage(url: tab['url']),
+                              ),
+                            );
+                          },
+                          child: Text('Go to ${tab['title']}'),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            _confirmDeleteTab(
+                                context, tab['id'], apiService, appState);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.red, // Red color for delete button
                           ),
-                        );
-                      },
-                      child: Text('Go to ${tab['title']}'),
+                          child: const Text('Delete Tab'),
+                        ),
+                      ],
                     ),
                   );
                 }).toList(),
@@ -129,8 +148,6 @@ class TabsPage extends StatelessWidget {
                 String title = titleController.text;
                 String url = formatUrl(urlController.text);
 
-                // print("\n\n $url");
-
                 if (title.isNotEmpty && url.isNotEmpty) {
                   final result = await apiService.createTab(
                     titleController.text,
@@ -162,23 +179,53 @@ class TabsPage extends StatelessWidget {
       },
     );
   }
-}
 
-// Sample WebView page to display the URL
-class WebViewPage extends StatelessWidget {
-  final String url;
+  // Confirm dialog to delete a tab
+  void _confirmDeleteTab(BuildContext context, int tabId, TabService apiService,
+      AppState appState) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this tab?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the popup
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final success =
+                    await appState.deleteTabFromApi(tabId, apiService);
 
-  const WebViewPage({super.key, required this.url});
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Tab deleted successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  Navigator.pop(context,
+                      true); // Close the TabsPage and pass true to indicate successful deletion
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to delete tab'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('WebView for $url'),
-      ),
-      body: Center(
-        child: Text('Loading content from $url'), // Replace with actual WebView
-      ),
+                Navigator.of(context).pop(); // Close the popup
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

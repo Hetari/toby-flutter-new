@@ -12,6 +12,7 @@ class CollectionSectionWidget extends StatelessWidget {
     required this.cardsData,
     required this.onDelete,
     required this.onUpdate,
+    required void Function(int collectionId, List tabs) onViewTabs,
   });
 
   @override
