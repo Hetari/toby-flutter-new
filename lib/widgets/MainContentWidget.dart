@@ -113,15 +113,6 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                             'subtitle':
                                 collection['description'] ?? 'No description',
                             'tags': tags,
-                            'onTap': () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TabsPage(collectionId: collection['id']),
-                                ),
-                              );
-                            },
                             'icon': Icons.folder,
                             'color': Colors.blue,
                           };
