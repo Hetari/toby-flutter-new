@@ -62,6 +62,26 @@ class CollectionService {
     return {};
   }
 
+  // Update an existing collection
+  Future<void> updateCollection(
+      int id, String title, String description) async {
+    if (_appState.isLoggedIn) {
+      final token = _appState.userToken;
+
+      if (token == null || token.isEmpty) {
+        throw Exception('User is not authenticated. Please log in.');
+      }
+
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json'
+      };
+
+      await _apiWrapper.put('/collections/$id',
+          {'title': title, 'description': description}, headers);
+    }
+  }
+
   // Delete a collection
   Future<Map<String, dynamic>> deleteCollection(int id) async {
     // print("the id is : $id");

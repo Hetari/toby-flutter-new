@@ -11,11 +11,14 @@ class AuthService {
   // Method to handle user login
   Future<Map<String, dynamic>> login(
       BuildContext context, String email, String password) async {
-    print("hello login");
+    // print("hello login");
+
+    // final headers = _getHeaders(); // استخدام الدالة للحصول على headers
     final response = await _apiWrapper.post('/login', {
       'email': email,
       'password': password,
-    });
+    }, {});
+
     bool isLoggedIn = response['success'] ?? false;
     // إذا كانت الاستجابة ناجحة، قم بتخزين البيانات في AppState
     if (isLoggedIn) {
@@ -23,7 +26,6 @@ class AuthService {
       final appState = Provider.of<AppState>(context, listen: false);
       await appState.logIn(email, response['data']['access_token']);
     }
-    // print(response);
 
     return response;
   }
@@ -34,7 +36,7 @@ class AuthService {
       'name': name,
       'email': email,
       'password': password,
-    });
+    }, {});
 
     if (response['success']) {
       // الوصول إلى AppState باستخدام Provider

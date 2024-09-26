@@ -42,7 +42,7 @@ class LoginScreen extends StatelessWidget {
     // Call the AuthService to perform login
     final result = await _authService.login(context, email, password);
 
-    print(result);
+    // print(result);
 
     // Check if login was successful
     if (result['success'] == true) {
