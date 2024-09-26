@@ -12,25 +12,31 @@ class CollectionService {
   // Fetch all collections for the logged-in user
   Future<List<dynamic>> fetchCollections() async {
     if (_appState.isLoggedIn) {
-      final token = _appState.userToken;
+      final token = _appState.userToken; // الحصول على token المستخدم
+      // print(token);
 
       if (token == null || token.isEmpty) {
         throw Exception('User is not authenticated. Please log in.');
       }
 
+      // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.get('/collections', headers: headers);
+      // print(response['success']);
       if (response.containsKey('error')) {
         return [];
       }
 
       if (response is Map && response['data'] is List) {
         return response['data']; // إرجاع البيانات إذا كانت قائمة
+      } else if (response is Map && response['data'] is Map) {
+        return response['data'].values.toList(); // إرجاع قائمة الكولكشنز
       }
+      // return response['data'];
     }
     return []; // إرجاع قائمة فارغة إذا لم يكن المستخدم مسجلاً للدخول
   }
@@ -63,27 +69,17 @@ class CollectionService {
 
   // Delete a collection
   Future<Map<String, dynamic>> deleteCollection(int id) async {
-    if (_appState.isLoggedIn) {
-      final token = _appState.userToken;
-
-      if (token == null || token.isEmpty) {
-        throw Exception('User is not authenticated. Please log in.');
-      }
-
-      final headers = {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
-      };
-      final response = await _apiWrapper.post(
-        '/collections/delete',
-        {
-          'id': id,
-        },
-        headers: headers,
-      );
-
-      return response;
-    }
-    return {};
+    // print("the id is : $id");
+    final token = _appState.userToken;
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json'
+    };
+    final response = await _apiWrapper.delete(
+      '/collections/$id',
+      headers: headers,
+    );
+    // print(response['success']);
+    return response;
   }
 }
