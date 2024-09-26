@@ -8,11 +8,7 @@ class TagService {
   // Helper function to get headers
   Map<String, String> _getHeaders() {
     final token = _appState.userToken;
-
-    if (token == null || token.isEmpty) {
-      throw Exception('User is not authenticated. Please log in.');
-    }
-
+    // Fetch all tags for a specific tab
     return {
       'Authorization': 'Bearer $token',
       'Accept': 'application/json',
