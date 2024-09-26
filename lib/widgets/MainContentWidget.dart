@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
+import 'package:toby_flutter/screens/EditCollectionScreen.dart';
 import 'package:toby_flutter/screens/Tabs_screen.dart';
 import 'package:toby_flutter/screens/add_collection.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
@@ -59,7 +60,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddCollectionScreen(collection: {
+        builder: (context) => UpdateCollectionState(collection: {
           'id': id,
           'title': title,
           'description': description,
@@ -135,7 +136,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                 ),
                 FooterWidget(
                   onAddPressed: () async {
-                    final result = await Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddCollectionScreen(
@@ -143,9 +144,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                         ),
                       ),
                     );
-                    if (result != null) {
-                      _refreshCollections(); // تحديث الصفحة إذا تم إنشاء مجموعة جديدة
-                    }
+                    _refreshCollections(); // تحديث الصفحة إذا تم إنشاء مجموعة جديدة
                   },
                 ),
               ],

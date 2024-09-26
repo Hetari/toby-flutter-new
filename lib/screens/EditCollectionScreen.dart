@@ -5,17 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/services/CollectionService.dart';
 
-class AddCollectionScreen extends StatefulWidget {
+class UpdateCollectionState extends StatefulWidget {
   final Map<String, dynamic>?
       collection; // البيانات الحالية للمجموعة إذا كانت موجودة
 
-  const AddCollectionScreen({super.key, this.collection});
+  const UpdateCollectionState({super.key, this.collection});
 
   @override
-  _AddCollectionScreenState createState() => _AddCollectionScreenState();
+  _UpdateCollectionStateState createState() => _UpdateCollectionStateState();
 }
 
-class _AddCollectionScreenState extends State<AddCollectionScreen> {
+class _UpdateCollectionStateState extends State<UpdateCollectionState> {
   final _formKey = GlobalKey<FormState>();
   String title = '';
   String description = '';
@@ -37,15 +37,41 @@ class _AddCollectionScreenState extends State<AddCollectionScreen> {
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      if (isEdit) {
-        // تعديل المجموعة الحالية
-        await _collectionService.updateCollection(
-            widget.collection!['id'], title, description);
-      } else {
-        // إنشاء مجموعة جديدة
-        await _collectionService.createCollection(title, description);
+      try {
+        if (isEdit) {
+          // تعديل المجموعة الحالية
+          await _collectionService.updateCollection(
+              widget.collection!['id'], title, description);
+
+          // عرض رسالة النجاح
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم التعديل بنجاح!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          // إنشاء مجموعة جديدة
+          await _collectionService.createCollection(title, description);
+
+          // عرض رسالة النجاح
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم إنشاء المجموعة بنجاح!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        Navigator.pop(context, true);
+      } catch (e) {
+        // في حالة حدوث خطأ
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('حدث خطأ: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
-      Navigator.pop(context, true);
     }
   }
 
