@@ -4,7 +4,7 @@ import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/services/TabService.dart';
 
 class TabsPage extends StatelessWidget {
-  final List<Map<String, dynamic>>? tabs; // Allow null
+  final List<dynamic>? tabs; // Allow null
   final int collectionId;
 
   const TabsPage({super.key, required this.tabs, required this.collectionId});

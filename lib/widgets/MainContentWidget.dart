@@ -105,12 +105,14 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                       return CollectionSectionWidget(
                         cardsData: collections.map((collection) {
                           List<dynamic> tags = collection['tags'] ?? [];
+                          List<dynamic> tabs = collection['tabs'] ?? [];
                           return {
                             'id': collection['id'],
                             'title': collection['title'] ?? 'Untitled',
                             'subtitle':
                                 collection['description'] ?? 'No description',
                             'tags': tags,
+                            'tabs': tabs,
                             'icon': Icons.folder,
                             'color': Colors.blue,
                           };
