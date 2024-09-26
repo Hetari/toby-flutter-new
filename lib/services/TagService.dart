@@ -19,7 +19,7 @@ class TagService {
     };
     final response = await _apiWrapper.get(
       '/tags',
-      headers: headers,
+      headers,
     );
     return response;
   }
