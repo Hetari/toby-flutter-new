@@ -12,7 +12,7 @@ class AuthService {
     final response = await _apiWrapper.post('/login', {
       'email': email,
       'password': password,
-    });
+    }, {});
     bool isLoggedIn = response['success'] ?? false;
     // إذا كانت الاستجابة ناجحة، قم بتخزين البيانات في AppState
     if (isLoggedIn) {
@@ -31,7 +31,7 @@ class AuthService {
       'name': name,
       'email': email,
       'password': password,
-    });
+    }, {});
 
     if (response['success']) {
       // الوصول إلى AppState باستخدام Provider

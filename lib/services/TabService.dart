@@ -44,7 +44,19 @@ class TabService {
   // Fetch all tabs
   Future<List<dynamic>> fetchAllTabs() async {
     if (_appState.isLoggedIn) {
-      final response = await _apiWrapper.get('/tabs');
+      final token = _appState.userToken;
+
+      if (token == null || token.isEmpty) {
+        throw Exception('User is not authenticated. Please log in.');
+      }
+
+      // Prepare the headers with the token
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json'
+      };
+
+      final response = await _apiWrapper.get('/tabs', headers);
 
       if (response.containsKey('error')) {
         // Handle error in response
@@ -60,18 +72,53 @@ class TabService {
 
   // Create a new tab
   Future<Map<String, dynamic>> createTab(String title, int collectionId) async {
-    final response = await _apiWrapper.post('/tabs/create', {
-      'title': title,
-      'collection_id': collectionId,
-    });
-    return response; // Consider handling response error here
+    if (_appState.isLoggedIn) {
+      final token = _appState.userToken;
+
+      if (token == null || token.isEmpty) {
+        throw Exception('User is not authenticated. Please log in.');
+      }
+
+      // Prepare the headers with the token
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json'
+      };
+
+      final response = await _apiWrapper.post(
+          '/tabs/create',
+          {
+            'title': title,
+            'collection_id': collectionId,
+          },
+          headers);
+      return response; // Consider handling response error here
+    }
+    return {};
   }
 
   // Delete a tab
   Future<Map<String, dynamic>> deleteTab(int id) async {
-    final response = await _apiWrapper.post('/tabs/delete', {
-      'id': id,
-    });
-    return response; // Consider handling response error here
+    if (_appState.isLoggedIn) {
+      final token = _appState.userToken;
+
+      if (token == null || token.isEmpty) {
+        throw Exception('User is not authenticated. Please log in.');
+      }
+
+      // Prepare the headers with the token
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json'
+      };
+      final response = await _apiWrapper.post(
+          '/tabs/delete',
+          {
+            'id': id,
+          },
+          headers);
+      return response; // Consider handling response error here
+    }
+    return {};
   }
 }
