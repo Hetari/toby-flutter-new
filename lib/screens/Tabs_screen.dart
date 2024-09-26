@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toby_flutter/providers/app_state.dart';
@@ -127,7 +129,7 @@ class TabsPage extends StatelessWidget {
                 String title = titleController.text;
                 String url = formatUrl(urlController.text);
 
-                print("\n\n $url");
+                // print("\n\n $url");
 
                 if (title.isNotEmpty && url.isNotEmpty) {
                   final result = await apiService.createTab(
