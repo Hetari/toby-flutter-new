@@ -12,7 +12,6 @@ class ApiServiceWrapper {
     'Accept':
         'application/json', // Specifies that you expect JSON data in response
     'User-Agent': 'Toby/1.0.0', // Identifies your app to the server
-    'Authorization': 'Bearer ',
   };
 
   // New method for making GET requests

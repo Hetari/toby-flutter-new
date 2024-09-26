@@ -16,7 +16,6 @@ class TagService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
       final response = await _apiWrapper.get(
         '/tags',
@@ -38,7 +37,6 @@ class TagService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
       final response = await _apiWrapper.post(
           '/tags/create',
@@ -63,7 +61,6 @@ class TagService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
       final response = await _apiWrapper.post(
           '/tags/delete',

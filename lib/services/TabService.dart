@@ -24,7 +24,6 @@ class TabService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.get('/tabs', headers);
@@ -53,7 +52,6 @@ class TabService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.get('/tabs', headers);
@@ -82,7 +80,6 @@ class TabService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.post(
@@ -109,7 +106,6 @@ class TabService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
       final response = await _apiWrapper.post(
           '/tabs/delete',

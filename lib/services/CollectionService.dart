@@ -23,7 +23,6 @@ class CollectionService {
       // Prepare the headers with the token
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.get('/collections', headers);
@@ -54,7 +53,6 @@ class CollectionService {
 
       final headers = {
         'Authorization': 'Bearer $token',
-        'Accept': 'application/json'
       };
 
       final response = await _apiWrapper.post(
@@ -74,7 +72,6 @@ class CollectionService {
     final token = _appState.userToken;
     final headers = {
       'Authorization': 'Bearer $token',
-      'Accept': 'application/json'
     };
     final response = await _apiWrapper.delete(
       '/collections/$id',
