@@ -15,7 +15,7 @@ class TabsPage extends StatelessWidget {
       // تمرير AppState إلى TabService
       return await TabService(appState).fetchTabs(collectionId);
     } catch (e) {
-      print("Error fetching tabs: $e");
+      // print("Error fetching tabs: $e");
       return [];
     }
   }

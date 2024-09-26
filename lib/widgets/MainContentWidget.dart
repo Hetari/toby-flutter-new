@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,15 +11,14 @@ import 'package:toby_flutter/widgets/FooterWidget.dart';
 import 'package:toby_flutter/widgets/HeaderWidget.dart';
 
 class MainContentWidget extends StatefulWidget {
-  const MainContentWidget({Key? key})
-      : super(key: key); // تحديث المفتاح ليكون nullable
+  const MainContentWidget({super.key});
 
   @override
   _MainContentWidgetState createState() => _MainContentWidgetState();
 }
 
 class _MainContentWidgetState extends State<MainContentWidget> {
-  late final CollectionService apiService; // وضع final هنا
+  late final CollectionService apiService;
   late Future<List<dynamic>> collectionsFuture;
 
   @override
@@ -27,23 +26,21 @@ class _MainContentWidgetState extends State<MainContentWidget> {
     super.initState();
     final appState = Provider.of<AppState>(context, listen: false);
     apiService = CollectionService(appState);
-    collectionsFuture = fetchCollections(); // استدعاء دالة fetchCollections
+    collectionsFuture = fetchCollections();
   }
 
   Future<List<dynamic>> fetchCollections() async {
     try {
       return await apiService.fetchCollections();
     } catch (e) {
-      debugPrint(
-          "Error fetching collections: $e"); // استخدام debugPrint بدلاً من print
+      debugPrint("Error fetching collections: $e");
       return [];
     }
   }
 
   void _refreshCollections() {
     setState(() {
-      collectionsFuture =
-          fetchCollections(); // تحديث المستقبل لجلب البيانات الجديدة
+      collectionsFuture = fetchCollections();
     });
   }
 
@@ -51,20 +48,28 @@ class _MainContentWidgetState extends State<MainContentWidget> {
   void _deleteCollection(int id) async {
     try {
       await apiService.deleteCollection(id);
-      _refreshCollections(); // تحديث البيانات بعد الحذف
+      _refreshCollections();
     } catch (e) {
-      debugPrint("Error deleting collection: $e"); // استخدام debugPrint
+      debugPrint("Error deleting collection: $e");
     }
   }
 
   // تحديث مجموعة
-  void _updateCollection(int id) {
+  void _updateCollection(int id, String title, String description) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TabsPage(collectionId: id),
+        builder: (context) => AddCollectionScreen(collection: {
+          'id': id,
+          'title': title,
+          'description': description,
+        }),
       ),
-    );
+    ).then((result) {
+      if (result == true) {
+        _refreshCollections(); // تحديث البيانات بعد التعديل
+      }
+    });
   }
 
   @override
@@ -121,7 +126,7 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                           };
                         }).toList(),
                         onDelete: _deleteCollection,
-                        onUpdate: _updateCollection,
+                        onUpdate: _updateCollection, // تحديث دالة التحديث
                       );
                     } else {
                       return const Center(child: Text('No collections found'));
@@ -133,11 +138,12 @@ class _MainContentWidgetState extends State<MainContentWidget> {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddCollectionScreen(),
+                        builder: (context) => AddCollectionScreen(
+                          collection: const {},
+                        ),
                       ),
                     );
                     if (result != null) {
-                      // تحقق مما إذا كانت النتيجة غير فارغة
                       _refreshCollections(); // تحديث الصفحة إذا تم إنشاء مجموعة جديدة
                     }
                   },

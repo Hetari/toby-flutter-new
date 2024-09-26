@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:toby_flutter/providers/app_state.dart';
 import 'package:toby_flutter/services/api_service_wrapper.dart';
 import 'package:provider/provider.dart'; // استيراد Provider
@@ -9,6 +11,9 @@ class AuthService {
   // Method to handle user login
   Future<Map<String, dynamic>> login(
       BuildContext context, String email, String password) async {
+    // print("hello login");
+
+    // final headers = _getHeaders(); // استخدام الدالة للحصول على headers
     final response = await _apiWrapper.post('/login', {
       'email': email,
       'password': password,
@@ -20,7 +25,6 @@ class AuthService {
       final appState = Provider.of<AppState>(context, listen: false);
       await appState.logIn(email, response['data']['access_token']);
     }
-    // print(response);
 
     return response;
   }
