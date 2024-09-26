@@ -29,33 +29,47 @@ class CollectionSectionWidget extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             final card = cardsData[index];
-            return Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(card['icon'], color: card['color']),
-                  Text(card['title'], style: const TextStyle(fontSize: 18)),
-                  Text(card['subtitle'], style: const TextStyle(fontSize: 14)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          onUpdate(
-                            card['id'],
-                            card['title'],
-                            card['subtitle'], // تمرير العنوان والوصف مع المعرف
-                          );
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _confirmDelete(context, card['id']),
-                      ),
-                    ],
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TabsPage(
+                      tabs: card['tabs'],
+                    ),
                   ),
-                ],
+                );
+              },
+              child: Card(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(card['icon'], color: card['color']),
+                    Text(card['title'], style: const TextStyle(fontSize: 18)),
+                    Text(card['subtitle'],
+                        style: const TextStyle(fontSize: 14)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () {
+                            onUpdate(
+                              card['id'],
+                              card['title'],
+                              card[
+                                  'subtitle'], // تمرير العنوان والوصف مع المعرف
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _confirmDelete(context, card['id']),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },

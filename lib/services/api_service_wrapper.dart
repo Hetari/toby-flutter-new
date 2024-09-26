@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiServiceWrapper {
-  final String baseUrl = 'http://10.0.2.2:8000/api'; //when use flutter emulator
-  // final String baseUrl = 'http://127.0.0.1:8000/api'; // when use chrome web
+  // final String baseUrl = 'http://10.0.2.2:8000/api'; //when use flutter emulator
+  final String baseUrl = 'http://127.0.0.1:8000/api'; // when use chrome web
 
   // Generic method for making POST requests
   static const Map<String, String> defaultHeaders = {
