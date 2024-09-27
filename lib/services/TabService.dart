@@ -76,21 +76,9 @@ class TabService {
     return response;
   }
 
-  // Delete a tab
-  // Future<Map<String, dynamic>> deleteTab(int id) async {
-  //   final headers = _getHeaders();
-  //   // TODO: fix it
-  //   final response = await _apiWrapper.post(
-  //     '/tabs',
-  //     {
-  //       'id': id,
-  //     },
-  //     headers,
-  //   );
-  //   return response;
-  // }
   Future<Map<String, dynamic>> deleteTab(int id) async {
     final headers = _getHeaders();
+    // print('this is the tabe deleted $id');
     final response = await _apiWrapper.delete(
       '/tabs/$id',
       headers,
