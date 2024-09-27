@@ -86,7 +86,7 @@ class ApiServiceWrapper {
   // Handle response parsing
   Map<String, dynamic> _handleResponse(http.Response response) {
     final decoded = jsonDecode(response.body);
-    print(decoded);
+    // print(decoded);
     return decoded is Map<String, dynamic>
         ? decoded
         : {'error': 'Unexpected response format'};
