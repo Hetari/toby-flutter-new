@@ -24,13 +24,26 @@ class TabsPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Tabs'),
           bottom: tabs != null && tabs!.isNotEmpty
-              ? TabBar(
-                  isScrollable:
-                      true, // Allows horizontal scrolling if tabs are too many
-                  tabs: tabs!.map((tab) {
-                    return Tab(
-                        text: tab['title']); // Display the title for each tab
-                  }).toList(),
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  child: Row(
+                    children: [
+                      TabBar(
+                        isScrollable: true,
+                        tabs: tabs!.map((tab) {
+                          return Tab(
+                            text: tab['title'],
+                          );
+                        }).toList(),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _showAddTabDialog(context, apiService);
+                        },
+                        child: const Text('Add Tab'),
+                      ),
+                    ],
+                  ),
                 )
               : null, // No TabBar if there are no tabs
         ),
